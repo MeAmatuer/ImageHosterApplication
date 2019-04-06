@@ -96,15 +96,17 @@ public class ImageController {
         Image image = imageService.getImage(imageId);
         User loggedInUser = (User) session.getAttribute("loggeduser");
         User imageOwner = image.getUser();
+        List<Tag> tags = image.getTags();
 
-        model.addAttribute("tags", image.getTags());
 
         if(loggedInUser.getId() == imageOwner.getId()){
             model.addAttribute("image", image);
+            model.addAttribute("tags", convertTagsToString(tags));
             return "images/edit";
         }else {
-            image.setImageAccessDeniedError("Only the owner of the image can edit the image");
+            model.addAttribute("editError",true);
             model.addAttribute("image", image);
+            model.addAttribute("tags",tags);
             return "images/image";
         }
 
@@ -159,10 +161,9 @@ public class ImageController {
             imageService.deleteImage(imageId);
             return "redirect:/images";
         }else {
-            String tags = convertTagsToString(currentImage.getTags());
             model.addAttribute("tags", currentImage.getTags());
-            currentImage.setImageAccessDeniedError("Only the owner of the image can delete the image");
             model.addAttribute("image", currentImage);
+            model.addAttribute("deleteError",true);
             return "images/image";
         }
 
