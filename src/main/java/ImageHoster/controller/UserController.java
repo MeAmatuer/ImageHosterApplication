@@ -45,11 +45,8 @@ public class UserController {
     public String registerUser(User user, Model model) {
 
         String enteredPassword = user.getPassword();
-        String passwordPattern = "((?=.*\\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z\\d]).{3,})";
-        Pattern pattern = Pattern.compile(passwordPattern);
-        Matcher matcher = pattern.matcher(enteredPassword);
 
-        Boolean validationResult = matcher.matches();
+        Boolean validationResult = passwordValidation(enteredPassword);
         if (validationResult) {
             userService.registerUser(user);
             return "users/login";
@@ -62,6 +59,19 @@ public class UserController {
             model.addAttribute("passwordTypeError", error);
             return "users/registration";
         }
+    }
+
+    /**
+     * Method to do password validation
+     *
+     * @param enteredPassword
+     * @return Boolean
+     */
+    private Boolean passwordValidation(String enteredPassword) {
+        String passwordPattern = "((?=.*\\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z\\d]).{3,})";
+        Pattern pattern = Pattern.compile(passwordPattern);
+        Matcher matcher = pattern.matcher(enteredPassword);
+        return matcher.matches();
     }
 
     //This controller method is called when the request pattern is of type 'users/login'
