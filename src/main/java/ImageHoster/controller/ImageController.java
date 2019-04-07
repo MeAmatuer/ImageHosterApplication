@@ -38,7 +38,7 @@ public class ImageController {
     //This method is called when the details of the specific image with corresponding title are to be displayed
     //The logic is to get the image from the databse with corresponding title. After getting the image from the database the details are shown
     //First receive the dynamic parameter in the incoming request URL in a string variable 'title' and also the Model type object
-    //Call the getImageObject() method in the business logic to fetch all the details of that image
+    //Call the getImageByTitle() method in the business logic to fetch all the details of that image
     //Add the image in the Model type object with 'image' as the key
     //Return 'images/image.html' file
 
@@ -46,10 +46,19 @@ public class ImageController {
     //Here a list of tags is added in the Model type object
     //this list is then sent to 'images/image.html' file and the tags are displayed
     @RequestMapping("/images/{imageId}/{title}")
-    public String showImage(@PathVariable(name = "imageId") Integer imageId, @PathVariable(name = "title") String title, Model model) {
-        Image image = imageService.getImageObject(imageId, title);
+    public String showImage(@PathVariable(name = "imageId") Integer imageId, @PathVariable(name = "title") String title, Model model) throws NullPointerException {
+        Image image = imageService.getImage(imageId);
         model.addAttribute("image", image);
-        model.addAttribute("tags", image.getTags());
+        try {
+            List<Tag> tags = image.getTags();
+            if(tags.isEmpty()){
+                tags.add(new Tag());
+            }
+            model.addAttribute("tags", tags);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            model.addAttribute("image","");
+        }
         return "images/image";
     }
 
@@ -104,7 +113,7 @@ public class ImageController {
             model.addAttribute("tags", convertTagsToString(tags));
             return "images/edit";
         }else {
-            model.addAttribute("editError",true);
+            model.addAttribute("editError","Only the owner of the image can edit the image");
             model.addAttribute("image", image);
             model.addAttribute("tags",tags);
             return "images/image";
@@ -163,7 +172,7 @@ public class ImageController {
         }else {
             model.addAttribute("tags", currentImage.getTags());
             model.addAttribute("image", currentImage);
-            model.addAttribute("deleteError",true);
+            model.addAttribute("deleteError","Only the owner of the image can delete the image");
             return "images/image";
         }
 
