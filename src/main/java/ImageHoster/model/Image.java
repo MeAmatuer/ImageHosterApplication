@@ -45,7 +45,7 @@ public class Image {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "image",cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "image", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     //The attribute contains a list of all the tags of an image
@@ -71,7 +71,6 @@ public class Image {
         this.description = description;
         this.date = date;
     }
-
 
 
     public Integer getId() {

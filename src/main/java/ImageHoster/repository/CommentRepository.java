@@ -15,6 +15,10 @@ public class CommentRepository {
     @PersistenceUnit(unitName = "imageHoster")
     private EntityManagerFactory emf;
 
+    /**
+     * DAO Method to add comments to Database
+     * @param comment
+     */
     public void addComment(Comment comment) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -24,7 +28,7 @@ public class CommentRepository {
             em.persist(comment);
             transaction.commit();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             transaction.rollback();
         }
     }

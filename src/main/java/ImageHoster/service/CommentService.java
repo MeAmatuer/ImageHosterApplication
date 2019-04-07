@@ -14,6 +14,10 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
+    /**
+     * Service Method to add Comments to Images
+     * @param comment
+     */
     public void addComment(Comment comment) {
         comment.setCreatedDate(LocalDate.now());
         commentRepository.addComment(comment);

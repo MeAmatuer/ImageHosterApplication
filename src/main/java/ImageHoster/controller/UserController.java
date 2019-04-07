@@ -50,10 +50,10 @@ public class UserController {
         Matcher matcher = pattern.matcher(enteredPassword);
 
         Boolean validationResult = matcher.matches();
-        if(validationResult) {
+        if (validationResult) {
             userService.registerUser(user);
             return "users/login";
-        }else {
+        } else {
             user = new User();
             UserProfile profile = new UserProfile();
             user.setProfile(profile);

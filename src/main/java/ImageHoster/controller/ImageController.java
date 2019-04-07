@@ -53,13 +53,13 @@ public class ImageController {
         model.addAttribute("comments", image.getComments());
         try {
             List<Tag> tags = image.getTags();
-            if(tags.isEmpty()){
+            if (tags.isEmpty()) {
                 tags.add(new Tag());
             }
             model.addAttribute("tags", tags);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
-            model.addAttribute("image","");
+            model.addAttribute("image", "");
         }
 //        model.addAttribute("comment", new Comment());
         return "images/image";
@@ -111,14 +111,14 @@ public class ImageController {
         List<Tag> tags = image.getTags();
 
 
-        if(loggedInUser.getId() == imageOwner.getId()){
+        if (loggedInUser.getId() == imageOwner.getId()) {
             model.addAttribute("image", image);
             model.addAttribute("tags", convertTagsToString(tags));
             return "images/edit";
-        }else {
-            model.addAttribute("editError","Only the owner of the image can edit the image");
+        } else {
+            model.addAttribute("editError", "Only the owner of the image can edit the image");
             model.addAttribute("image", image);
-            model.addAttribute("tags",tags);
+            model.addAttribute("tags", tags);
             model.addAttribute("comments", image.getComments());
             return "images/image";
         }
@@ -156,7 +156,7 @@ public class ImageController {
         updatedImage.setDate(new Date());
 
         imageService.updateImage(updatedImage);
-        return "redirect:/images/" +  updatedImage.getId() + "/" + updatedImage.getTitle();
+        return "redirect:/images/" + updatedImage.getId() + "/" + updatedImage.getTitle();
     }
 
 
@@ -170,19 +170,18 @@ public class ImageController {
         User imageOwner = currentImage.getUser();
 
 
-        if(loggedInUser.getId() == imageOwner.getId()){
+        if (loggedInUser.getId() == imageOwner.getId()) {
             imageService.deleteImage(imageId);
             return "redirect:/images";
-        }else {
+        } else {
             model.addAttribute("tags", currentImage.getTags());
             model.addAttribute("image", currentImage);
-            model.addAttribute("deleteError","Only the owner of the image can delete the image");
+            model.addAttribute("deleteError", "Only the owner of the image can delete the image");
             model.addAttribute("comments", currentImage.getComments());
             return "images/image";
         }
 
     }
-
 
 
     //This method converts the image to Base64 format
